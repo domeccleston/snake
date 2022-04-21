@@ -31,10 +31,20 @@ class Snake {
     this.head = new Node(data);
     this.length = length;
     this.direction = "left";
+    this.opposites = {
+      up: "down",
+      down: "up",
+      left: "right",
+      right: "left",
+    };
   }
 
-  add(data) {
-    const newNode = new Node(data);
+  add() {
+    const { x, y } = this.getTail().data;
+
+    const newData = this.getNewCoords({ x, y }, this.opposites[this.direction]);
+
+    const newNode = new Node(newData);
 
     let current;
 
@@ -61,6 +71,14 @@ class Snake {
       coords.y += 1;
     }
     return coords;
+  }
+
+  getTail() {
+    let current = this.head;
+    while (current.next) {
+      current = current.next;
+    }
+    return current;
   }
 
   move() {
@@ -101,9 +119,8 @@ class Game {
     this.highScore = window.localStorage.getItem("highScore") || 0;
     this.board = this.createBoard(HEIGHT, WIDTH);
     this.snake = this.createSnake({ x: 10, y: 10 }, 1);
-    this.snake.add({ x: 10, y: 11 });
-    this.snake.add({ x: 10, y: 12 });
-    this.snake.add({ x: 10, y: 13 });
+    this.snake.board = this.board;
+    this.snake.add();
     this.addFoodToBoard();
     this.addSnakeToBoard();
     this.addListeners();
@@ -119,20 +136,16 @@ class Game {
       ArrowRight: "right",
     };
 
-    const opposites = {
-      up: "down",
-      down: "up",
-      left: "right",
-      right: "left",
-    };
-
     document.addEventListener("keydown", (e) => {
       const key = keys[e.key];
       if (key) {
-        if (this.snake.direction !== opposites[key]) {
+        if (this.snake.direction !== this.snake.opposites[key]) {
           this.snake.direction = key;
         }
       }
+      // if (e.key === " ") {
+      //   this.playGame();
+      // }
     });
   }
 
@@ -146,7 +159,7 @@ class Game {
       this.highScore = this.score;
       window.localStorage.setItem("highScore", this.highScore);
     }
-  
+
     const highScoreEl = document.querySelector(".high-score");
     highScoreEl.innerText = this.highScore;
   }
@@ -200,11 +213,11 @@ class Game {
 
     while (current) {
       if (this.board[current.data.x][current.data.y] === "F") {
-        // this.snake.add({ x: current.data.x, y: current.data.y });
         this.score = this.score + 1;
         this.interval = this.interval - 10;
         this.board[current.data.x][current.data.y] = 0;
         this.addFoodToBoard();
+        this.snake.add();
       }
 
       if (this.board[current.data.x][current.data.y] === "S") {

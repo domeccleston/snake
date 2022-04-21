@@ -31,3 +31,4 @@
 - start using git lmao [x]
 - fix current bug with border collisions [x]
 - fix bug whereby eating food triggers death [x]
+- add snake lengthen on eat food [ ]
