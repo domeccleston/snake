@@ -2,4 +2,4 @@
 
 the retro arcade game snake implemented in vanilla javascript
 
-to play: `npm run snake`
+play it at https://snake-domeccleston.vercel.app

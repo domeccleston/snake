@@ -1,9 +1,9 @@
 {
   "name": "snake",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "snake": "parcel index.html"
+    "snake": "parcel index.html",
+    "build": "rm -rf .parcel-cache && parcel build index.html"
   },
   "repository": {
     "type": "git",
