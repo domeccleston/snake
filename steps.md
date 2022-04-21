@@ -28,7 +28,9 @@
 - add high score functionality [x]
 - add restart functionality [x]
 - add persistent high scores [x]
-- fix current bug with border collisions
+- start using git lmao [x]
+- fix current bug with border collisions [x]
+- fix bug whereby eating food triggers death [x]
 
 On each tick, let the head of the snake move 1 square in
 the snake's current direction. Let the remaining squares

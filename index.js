@@ -147,9 +147,9 @@ class Game {
           this.snake.direction = key;
         }
       }
-      if (e.key === " ") {
-        this.startGame();
-      }
+      // if (e.key === " ") {
+      //   this.startGame();
+      // }
     });
   }
 
@@ -174,20 +174,20 @@ class Game {
     this.removeSnakeFromBoard();
     this.snake.move();
     this.addSnakeToBoard();
-    // if (!this.ended) {
-    //   console.log(this.interval);
-    //   this.timerID = setTimeout(this.startGame.bind(this), this.interval);
-    //   this.timeouts.push(this.timerID);
-    // }
+    if (!this.ended) {
+      console.log(this.interval);
+      this.timerID = setTimeout(this.startGame.bind(this), this.interval);
+      this.timeouts.push(this.timerID);
+    }
   }
 
   gameOver() {
     this.ended = true;
     this.timeouts.forEach((timerId) => clearTimeout(timerId));
     this.updateHighScore();
-    this.removeSnakeFromBoard();
     document.querySelector(".game-over").classList.add("flex");
     document.querySelector(".game-over").classList.remove("hidden");
+    this.removeSnakeFromBoard();
     document
       .querySelector(".game-over-button")
       .addEventListener("click", () => {
@@ -214,8 +214,6 @@ class Game {
   addSnakeToBoard() {
     let current = this.snake.head;
 
-    const currentSquare = this.board[current.data.x][current.data.y];
-
     if (this.snake.outOfBounds()) {
       this.gameOver();
     }
@@ -229,11 +227,9 @@ class Game {
         this.addFoodToBoard();
       }
 
-    console.log({ currentSquare });
-
-    // if (currentSquare === "S") {
-    //   this.gameOver();
-    // }
+      if (this.board[current.data.x][current.data.y]  === "S") {
+        this.gameOver();
+      }
 
       this.board[current.data.x][current.data.y] = "S";
       current = current.next;
