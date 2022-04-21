@@ -3,6 +3,7 @@ body {
   display: grid;
   place-items: center;
   width: 100%;
+  min-width: 780px;
   height: 100vh;
   margin: 0;
 }
