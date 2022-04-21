@@ -1,3 +1,5 @@
+// Utilities
+
 function range(start, end) {
   return Array.from({ length: end - start + 1 }, (_, i) => i + start);
 }
@@ -10,8 +12,12 @@ function clone(object) {
   return JSON.parse(JSON.stringify(object));
 }
 
+// Constants
+
 const HEIGHT = 40;
 const WIDTH = 40;
+
+// Create snake as singly-linked list
 
 class Node {
   constructor(data) {
@@ -78,13 +84,6 @@ class Snake {
       return true;
     }
   }
-
-  print() {
-    let current = this.head;
-    while (current) {
-      current = current.next;
-    }
-  }
 }
 
 class Food {
@@ -96,33 +95,20 @@ class Food {
 
 class Game {
   constructor() {
-    this.timerID = null;
-    this.timeouts = [];
     this.ended = false;
     this.interval = 100;
     this.score = 0;
     this.highScore = window.localStorage.getItem("highScore") || 0;
-    this.board = this.createBoard();
+    this.board = this.createBoard(HEIGHT, WIDTH);
     this.snake = this.createSnake({ x: 10, y: 10 }, 1);
     this.snake.add({ x: 10, y: 11 });
     this.snake.add({ x: 10, y: 12 });
     this.snake.add({ x: 10, y: 13 });
-    this.snake.add({ x: 10, y: 14 });
-    this.snake.add({ x: 10, y: 15 });
-    this.snake.add({ x: 10, y: 16 });
-    this.snake.add({ x: 10, y: 17 });
     this.addFoodToBoard();
     this.addSnakeToBoard();
     this.addListeners();
-    this.addGameToWindow();
     this.updateHighScore();
-    this.startGame();
-  }
-
-  addGameToWindow() {
-    if (typeof window !== "undefined") {
-      window.game = this;
-    }
+    this.playGame();
   }
 
   addListeners() {
@@ -147,15 +133,12 @@ class Game {
           this.snake.direction = key;
         }
       }
-      // if (e.key === " ") {
-      //   this.startGame();
-      // }
     });
   }
 
   updateScore() {
-    const score = document.querySelector(".score");
-    score.innerText = this.score;
+    const scoreEl = document.querySelector(".score");
+    scoreEl.innerText = this.score;
   }
 
   updateHighScore() {
@@ -163,11 +146,12 @@ class Game {
       this.highScore = this.score;
       window.localStorage.setItem("highScore", this.highScore);
     }
+  
     const highScoreEl = document.querySelector(".high-score");
     highScoreEl.innerText = this.highScore;
   }
 
-  startGame() {
+  playGame() {
     this.paintBoard();
     this.updateScore();
     this.updateHighScore();
@@ -175,19 +159,15 @@ class Game {
     this.snake.move();
     this.addSnakeToBoard();
     if (!this.ended) {
-      console.log(this.interval);
-      this.timerID = setTimeout(this.startGame.bind(this), this.interval);
-      this.timeouts.push(this.timerID);
+      setTimeout(this.playGame.bind(this), this.interval);
     }
   }
 
   gameOver() {
     this.ended = true;
-    this.timeouts.forEach((timerId) => clearTimeout(timerId));
     this.updateHighScore();
     document.querySelector(".game-over").classList.add("flex");
     document.querySelector(".game-over").classList.remove("hidden");
-    this.removeSnakeFromBoard();
     document
       .querySelector(".game-over-button")
       .addEventListener("click", () => {
@@ -227,7 +207,7 @@ class Game {
         this.addFoodToBoard();
       }
 
-      if (this.board[current.data.x][current.data.y]  === "S") {
+      if (this.board[current.data.x][current.data.y] === "S") {
         this.gameOver();
       }
 
@@ -236,11 +216,11 @@ class Game {
     }
   }
 
-  createBoard(height = HEIGHT, width = 40) {
+  createBoard(height, width) {
     const board = [];
-    for (const y of range(0, height)) {
+    for (const _ of range(0, height)) {
       const row = [];
-      for (const x of range(0, width)) {
+      for (const _ of range(0, width)) {
         row.push(0);
       }
       board.push(row);
