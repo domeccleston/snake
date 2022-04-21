@@ -1,0 +1,16 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "snake": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domeccleston/snake.git"
+  },
+  "author": "domeccleston",
+  "dependencies": {
+    "parcel": "^2.5.0"
+  }
+}
